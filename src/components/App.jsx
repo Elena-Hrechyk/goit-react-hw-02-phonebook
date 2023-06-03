@@ -12,23 +12,24 @@ export class App extends Component {
 
   formSubmit = data => {
     data.id = nanoid(5); // уникальний id контакта
-    console.log(data);
 
-    this.setState(({ contacts }) => ({
-      contacts: [...contacts, data],
-    }));
+    const newContact = data.name.toLowerCase();
+    const checkContact = this.state.contacts.some(
+      item => item.name.toLowerCase() === newContact
+    );
 
-    // this.setState(prevState => ({
-    //   contacts: prevState.contacts.map(item => {
-    //     console.log(data.name);
-    //     // return item.name !== data.name && [...prevState.contacts, data];
-    //   }),
-    // }));
+    if (!checkContact) {
+      this.setState(({ contacts }) => ({
+        contacts: [...contacts, data],
+      }));
+    } else {
+      return alert(`${data.name} is already in contacts`);
+    }
   };
 
   deleteContact = contactId => {
     this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+      contacts: prevState.contacts.filter(item => item.id !== contactId),
     }));
   };
 
@@ -39,11 +40,10 @@ export class App extends Component {
   getFilterContact() {
     const { contacts, filter } = this.state;
     const filterNorm = filter.toLowerCase();
-    const filteredArr = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filterNorm)
+    const filteredContacts = contacts.filter(item =>
+      item.name.toLowerCase().includes(filterNorm)
     );
-    console.log(filteredArr);
-    return filteredArr;
+    return filteredContacts;
   }
 
   render() {
