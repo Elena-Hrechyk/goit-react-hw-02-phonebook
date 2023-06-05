@@ -3,7 +3,6 @@ import css from './Form.module.css';
 
 export class Form extends Component {
   state = {
-    id: '',
     name: '',
     number: '',
   };

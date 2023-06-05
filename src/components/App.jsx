@@ -18,13 +18,13 @@ export class App extends Component {
       item => item.name.toLowerCase() === newContact
     );
 
-    if (!checkContact) {
-      this.setState(({ contacts }) => ({
-        contacts: [...contacts, data],
-      }));
-    } else {
+    if (checkContact) {
       return alert(`${data.name} is already in contacts`);
     }
+
+    this.setState(({ contacts }) => ({
+      contacts: [...contacts, data],
+    }));
   };
 
   deleteContact = contactId => {
@@ -40,14 +40,14 @@ export class App extends Component {
   getFilterContact() {
     const { contacts, filter } = this.state;
     const filterNorm = filter.toLowerCase();
-    const filteredContacts = contacts.filter(item =>
+    return contacts.filter(item =>
       item.name.toLowerCase().includes(filterNorm)
     );
-    return filteredContacts;
   }
 
   render() {
-    const { contacts, filter } = this.state;
+    const { filter } = this.state;
+    const filterContacts = this.getFilterContact();
 
     return (
       <>
@@ -70,10 +70,8 @@ export class App extends Component {
         </h3>
         <Filter filter={filter} onSearchContact={this.filterContact} />
         <ContactList
-          contacts={contacts}
+          contacts={filterContacts}
           onDeleteContact={this.deleteContact}
-          filter={filter}
-          onFilterContacts={this.getFilterContact()}
         />
       </>
     );
